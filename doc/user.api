@@ -1,0 +1,72 @@
+syntax = "v1"
+
+info (
+    title: "Admin"
+    author: "github.com/valcosmos"
+)
+
+type (
+    User {
+       Id            string `json:"id,omitempty"`
+       Password      string `json:"password,omitempty"`
+       Name          string `json:"name,omitempty"`
+       Status        int    `json:"status,omitempty"`
+    }
+    loginReq {
+       Name string `json:"name,omitempty"`
+       Password string `json:"password,omitempty"`
+    }
+    loginResp {
+       Status       int    `json:"status,omitempty"`
+       Id           string `json:"id,omitempty"`
+       Name         string `json:"name,omitempty"`
+       AccessToken  string `json:"token,omitempty"`
+       AccessExpire int64  `json:"accessExpire,omitempty"`
+       RefreshAfter int64  `json:"refreshAfter,omitempty"`
+    }
+
+    userListReq {
+        Ids   []string `json:"ids,omitempty"`
+        Name  string `json:"name,omitempty"`
+        Page  int    `json:"page,omitempty"`
+        Count int    `json:"count,omitempty"`
+    }
+    userListResp {
+        Count int64  `json:"count"`
+        List []*User `json:"data"`
+    }
+    upPasswordReq {
+        Id     string `json:"id"`
+        OldPwd string `json:"oldPwd"`
+        NewPwd string `json:"newPwd"`
+    }
+)
+
+
+@server(
+    group: /v1/user
+    logic: User
+    middleware: Jwt
+)
+service User {
+    @handler Login
+    post /login(loginReq) returns (loginResp)
+
+    @handler Info
+    get /:id(IdPathReq) returns(User)
+
+    @handler Create
+    post / (User)
+
+    @handler Edit
+    put / (User)
+
+    @handler Delete
+    delete /:id(IdPathReq)
+
+    @handler List
+    get /list(userListReq) returns (userListResp)
+
+    @handler UpPassword
+    post /password(upPasswordReq)
+}

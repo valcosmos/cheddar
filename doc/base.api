@@ -1,0 +1,9 @@
+info (
+	title: "Admin"
+	author: "github.com/valcosmos"
+)
+type (
+	IdPathReq {
+		Id string `path:"id,omitempty"`
+	}
+)

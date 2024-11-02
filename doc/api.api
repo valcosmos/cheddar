@@ -1,0 +1,10 @@
+syntax = "v1"
+
+import "base.api"
+import "user.api"
+
+info (
+	title:      "Admin"
+	author:     "github.com/valcosmos"
+	serviceMod: "1"
+)
